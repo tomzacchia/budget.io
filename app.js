@@ -1,20 +1,10 @@
 var budgetController = (function() {
-  // From the outside we do not have access to scope within this IIFE, by default variables and methods inside of IFFEs are private
-;
-  var x = 23;
 
-  var add = function(a) {
-    return x + a;
-  }
-
-  // inner functions always have access to outer function VO due to closure
-  return {
-    publicTest: function(b) {
-      return add(b)
-    }
-  }
+  // some code
 
 })();
+
+
 
 var UIController = (function() {
 
@@ -23,14 +13,28 @@ var UIController = (function() {
 })();
 
 
+
 var controller = (function(budgetCtrl, UICtrl) {
 
-  var z = budgetCtrl.publicTest(5);
+  var ctrlAddItem = function() {
+    // 1. Get input data
 
-  return {
-    anotherPublic: function() {
-      console.log(z);
-    }
+    // 2. Add item to the budget controller
+
+    // 3. Add the new item to the UI
+
+    // 4. Calculate the budget
+
+    // 5. Update budget in UI
+    console.log('set up successful');
   }
+
+  document.querySelector('.add__btn').addEventListener('click', ctrlAddItem);
+
+  document.addEventListener('keypress', function(event) {
+    if(event.keyCode === 13 || event.which === 13) {
+      ctrlAddItem();
+    }
+  });
 
 })(budgetController, UIController);
