@@ -8,7 +8,27 @@ var budgetController = (function() {
 
 var UIController = (function() {
 
-  // some code
+  // we store dom class names here in case they change in the future
+  var DOMStrings = {
+    inputType: '.add__type',
+    inputDescription: '.add__description',
+    inputValue: '.add__value',
+    inputBtn: '.add__btn'
+  }
+
+  return {
+    getInput: function() {
+      return {
+        type: document.querySelector(DOMStrings.inputType).value,
+        description: document.querySelector(DOMStrings.inputDescription).value,
+        value: document.querySelector(DOMStrings.inputValue).value
+      }
+    },
+    
+    getDOMString: function() {
+      return DOMStrings; // exposing DOMStrings to the public
+    }
+  }
 
 })();
 
@@ -16,8 +36,12 @@ var UIController = (function() {
 
 var controller = (function(budgetCtrl, UICtrl) {
 
+  var DOM = UICtrl.getDOMString();
+
   var ctrlAddItem = function() {
     // 1. Get input data
+    var input = UICtrl.getInput();
+    console.log(input);
 
     // 2. Add item to the budget controller
 
@@ -26,10 +50,9 @@ var controller = (function(budgetCtrl, UICtrl) {
     // 4. Calculate the budget
 
     // 5. Update budget in UI
-    console.log('set up successful');
   }
 
-  document.querySelector('.add__btn').addEventListener('click', ctrlAddItem);
+  document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
 
   document.addEventListener('keypress', function(event) {
     if(event.keyCode === 13 || event.which === 13) {
