@@ -1,5 +1,16 @@
 var budgetController = (function() {
 
+  var data = {
+    allItems: {
+      exp: {},
+      inc: {},      
+    },
+    totals: {
+      exp: 0,
+      inc: 0      
+    }
+  };
+
   var Expense = function(id, description, value) {
     this.id = id;
     this.description = description;
@@ -12,17 +23,13 @@ var budgetController = (function() {
     this.value = value;
   };
 
-  var data = {
-    allItems: {
-      exp: {},
-      inc: {},      
-    },
-    totals: {
-      exp: 0,
-      inc: 0      
-    }
-  };
+  var calculateTotal = function(itemsObj) {
+    var sum = Object.values(itemsObj).reduce( (acc, el) => {
+      return acc += el.value;
+    }, 0);
 
+    return sum;
+  } 
 
   return {
     addItem: function(type, des, val) {
@@ -40,6 +47,18 @@ var budgetController = (function() {
       data.allItems[type][ID] = newItem;
 
       return newItem;
+    },
+
+    calculateBudget: function() {
+      // calculate total income and expenses
+      var test = calculateTotal(data.allItems.inc);
+      // calculate budget
+
+      // calculate % of income that is an expense
+    },
+
+    testing: function() {
+      return data;
     }
   }
 
@@ -65,8 +84,8 @@ var UIController = (function() {
         // either inc or exp
         type: document.querySelector(DOMStrings.inputType).value,
         description: document.querySelector(DOMStrings.inputDescription).value,
-        value: document.querySelector(DOMStrings.inputValue).value
-      }
+        value: parseFloat(document.querySelector(DOMStrings.inputValue).value)
+      };
     },
     
     addListItem: function(obj, type) {
@@ -160,16 +179,26 @@ var controller = (function(budgetCtrl, UICtrl) {
     // 1. Get input data
     input = UICtrl.getInput();
 
-    // 2. Add item to the budget controller
-    newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+    if (input.description && input.value > 0)  {
+      // 2. Add item to the budget controller
+      newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
-    // 3. Add the new item to the UI
-    UIController.addListItem(newItem, input.type);
-    UIController.clearFields();
+      // 3. Add the new item to the UI
+      UIController.addListItem(newItem, input.type);
+      UIController.clearFields();
 
-    // 4. Calculate the budget
+      // 4. Calculate and update budget
+      updateBudget();
+    }
 
-    // 5. Update budget in UI
+  }
+
+  var updateBudget = function() {
+    // 1. Calculate the budget
+    budgetController.calculateBudget();
+    // 2. Return the budget
+
+    // 3. Update budget in UI
   }
 
   return {
