@@ -1,3 +1,8 @@
+/*
+--------------------------------------------------------------
+  budget controller
+--------------------------------------------------------------
+*/
 var budgetController = (function() {
 
   var data = {
@@ -8,7 +13,9 @@ var budgetController = (function() {
     totals: {
       exp: 0,
       inc: 0      
-    }
+    },
+    budget: 0,
+    percentageExp: 0
   };
 
   var Expense = function(id, description, value) {
@@ -23,12 +30,12 @@ var budgetController = (function() {
     this.value = value;
   };
 
-  var calculateTotal = function(itemsObj) {
-    var sum = Object.values(itemsObj).reduce( (acc, el) => {
+  var calculateTotal = function(type) {
+    var sum = Object.values(data.allItems[type]).reduce( (acc, el) => {
       return acc += el.value;
     }, 0);
 
-    return sum;
+    data.totals[type] = sum;
   } 
 
   return {
@@ -50,11 +57,27 @@ var budgetController = (function() {
     },
 
     calculateBudget: function() {
-      // calculate total income and expenses
-      var test = calculateTotal(data.allItems.inc);
+      // calculate total income and expenses at the same time to update %
+      calculateTotal('exp');
+      calculateTotal('inc');
+
       // calculate budget
+      data.budget = data.totals.inc - data.totals.exp;
 
       // calculate % of income that is an expense
+      if (data.totals.inc > 0) {
+        data.percentageExp = Math.round((data.totals.exp / data.totals.inc) * 100);
+      };
+      
+    },
+
+    getBudget: function() {
+      return {
+        totalInc: data.totals.inc,
+        totalExp: data.totals.exp,
+        budget: data.budget,
+        percentage: data.percentageExp
+      }
     },
 
     testing: function() {
@@ -66,6 +89,12 @@ var budgetController = (function() {
 
 
 
+
+/*
+--------------------------------------------------------------
+  UI controller
+--------------------------------------------------------------
+*/
 var UIController = (function() {
 
   // we store dom class names here in case they change in the future
@@ -75,7 +104,11 @@ var UIController = (function() {
     inputValue: '.add__value',
     inputBtn: '.add__btn',
     incomeContainer: '.income__list',
-    expenseContainer: '.expenses__list'
+    expenseContainer: '.expenses__list',
+    netBudget: '.budget__value',
+    totalIncome: '.budget__income--value',
+    totalExpense: '.budget__expenses--value',
+    percentage: '.budget__expenses--percentage'
   }
 
   return {
@@ -139,7 +172,9 @@ var UIController = (function() {
       var fields, fieldsArrray;
       
       // returns a list
-      fields = document.querySelectorAll(DOMStrings.inputDescription + ', ' + DOMStrings.inputValue);
+      fields = document.querySelectorAll(
+        DOMStrings.inputDescription + ', ' + DOMStrings.inputValue
+      );
 
       fieldsArrray = [ ...fields ];
 
@@ -148,6 +183,13 @@ var UIController = (function() {
       })
 
       fieldsArrray[0].focus();
+    },
+
+    displayBudget: function(obj) {
+      document.querySelector(DOMStrings.netBudget).textContent = obj.budget;
+      document.querySelector(DOMStrings.totalIncome).textContent = obj.totalInc;
+      document.querySelector(DOMStrings.totalExpense).textContent = obj.totalExp;
+      document.querySelector(DOMStrings.percentage).textContent = `${obj.percentage}%`;
     },
 
     getDOMString: function() {
@@ -159,6 +201,13 @@ var UIController = (function() {
 
 
 
+
+
+/*
+--------------------------------------------------------------
+  Controller
+--------------------------------------------------------------
+*/
 var controller = (function(budgetCtrl, UICtrl) {
 
   var setUpEventListeners = function() {
@@ -196,15 +245,25 @@ var controller = (function(budgetCtrl, UICtrl) {
   var updateBudget = function() {
     // 1. Calculate the budget
     budgetController.calculateBudget();
+
     // 2. Return the budget
+    var budget = budgetCtrl.getBudget();
 
     // 3. Update budget in UI
+    UICtrl.displayBudget(budget);
   }
 
   return {
     init: function() {
       console.log('App has started');
       setUpEventListeners();
+
+      UICtrl.displayBudget({
+        totalInc: 0,
+        totalExp: 0,
+        budget: 0,
+        percentage: `0%`
+      })      
     }
   }
 
