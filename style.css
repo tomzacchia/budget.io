@@ -177,8 +177,10 @@ body {
 
 /***** LISTS *****/
 .container {
-    width: 1000px;
     margin: 60px auto;
+    padding: 0 1rem;    
+    width: 100%;
+    display: flex;
 }
 
 .income {
@@ -199,7 +201,7 @@ h2 {
     margin-bottom: 15px;
 }
 
-.icome__title { color: #28B9B5; }
+.income__title { color: #28B9B5; }
 .expenses__title { color: #FF5049; }
 
 .item {
