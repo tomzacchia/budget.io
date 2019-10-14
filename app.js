@@ -108,7 +108,8 @@ var UIController = (function() {
     netBudget: '.budget__value',
     totalIncome: '.budget__income--value',
     totalExpense: '.budget__expenses--value',
-    percentage: '.budget__expenses--percentage'
+    percentage: '.budget__expenses--percentage',
+    container: '.container'
   }
 
   return {
@@ -127,7 +128,7 @@ var UIController = (function() {
       // create HTML string with placeholder text 
       if (type === 'inc') {
         html = `
-          <div class="item clearfix" id="income-%id%">
+          <div class="item clearfix" id="inc-%id%">
             <div class="item__description"> %description% </div>
             <div class="right clearfix">
               <div class="item__value"> + %value% </div>
@@ -141,7 +142,7 @@ var UIController = (function() {
         `;
       } else if (type === 'exp') {
         html = `
-          <div class="item clearfix" id="expense-%id%">
+          <div class="item clearfix" id="exp-%id%">
             <div class="item__description"> %description% </div>
             <div class="right clearfix">
                 <div class="item__value"> - %value% </div>
@@ -219,7 +220,11 @@ var controller = (function(budgetCtrl, UICtrl) {
       if(event.keyCode === 13 || event.which === 13) {
         ctrlAddItem();
       }
-    });    
+    });
+
+    // event delegation
+    document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem)
+
   }
 
   var ctrlAddItem = function() {
@@ -238,6 +243,17 @@ var controller = (function(budgetCtrl, UICtrl) {
 
       // 4. Calculate and update budget
       updateBudget();
+    }
+
+  }
+
+  var ctrlDeleteItem = function(event) {
+    var itemDataset;
+
+    itemDataset = event.target.parentNode.parentNode.parentNode.parentNode.id;
+
+    if (itemDataset) {
+      console.log(itemDataset);
     }
 
   }
