@@ -177,8 +177,10 @@ body {
 
 /***** LISTS *****/
 .container {
-    width: 1000px;
     margin: 60px auto;
+    padding: 0 1rem;    
+    width: 100%;
+    display: flex;
 }
 
 .income {
