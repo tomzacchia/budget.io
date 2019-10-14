@@ -248,12 +248,20 @@ var controller = (function(budgetCtrl, UICtrl) {
   }
 
   var ctrlDeleteItem = function(event) {
-    var itemDataset;
+    var itemDataset, splitID, type, budgetItemID;
 
-    itemDataset = event.target.parentNode.parentNode.parentNode.parentNode.id;
+    itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
 
-    if (itemDataset) {
-      console.log(itemDataset);
+    if (itemID) {
+      splitID = itemID.split('-');
+      type = splitID[0];
+      budgetItemID = splitID[1];
+
+      // 1. Delete item from data structure
+
+      // 2. Delete the item from the UI
+
+      // 3. Update and show budget
     }
 
   }
