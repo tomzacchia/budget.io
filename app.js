@@ -171,7 +171,7 @@ var UIController = (function() {
     clearFields: function() {
       var fields, fieldsArrray;
       
-      // returns a list
+      // returns a list, convert to array
       fields = document.querySelectorAll(
         DOMStrings.inputDescription + ', ' + DOMStrings.inputValue
       );
