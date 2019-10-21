@@ -144,7 +144,8 @@ var UIController = (function() {
     totalExpense: '.budget__expenses--value',
     percentage: '.budget__expenses--percentage',
     container: '.container',
-    expensesPercentage: '.item__percentage'
+    expensesPercentage: '.item__percentage',
+    monthText: '.budget__title--month'
   }
 
   var formatNumber = function(num) {
@@ -258,7 +259,37 @@ var UIController = (function() {
       })
     },
 
+    displayMonth: function() {
+      var date, month, year, monthMap;
 
+      date = new Date();
+      monthMap = [
+        'January', 'February', 'March', 'April', 'May', 'June', 
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ]
+
+      month = monthMap[date.getMonth()];
+      year = date.getFullYear();
+
+      document.querySelector(DOMStrings.monthText).textContent = `${month}, ${year}`;
+    },
+
+    changedType: function() {
+      var fields = document.querySelectorAll(`
+        ${DOMStrings.inputType},
+        ${DOMStrings.inputDescription},
+        ${DOMStrings.inputValue}
+      `);
+
+      fields = [...fields];
+
+      var btn = document.querySelector(DOMStrings.inputBtn);
+
+      fields.forEach(el => {
+        el.classList.toggle('red-focus');
+      });
+      btn.classList.toggle('red');
+    },
 
     getDOMString: function() {
       return DOMStrings; // exposing DOMStrings to the public
@@ -290,7 +321,9 @@ var controller = (function(budgetCtrl, UICtrl) {
     });
 
     // event delegation
-    document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem)
+    document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+    
+    document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changedType);
 
   }
 
@@ -371,7 +404,9 @@ var controller = (function(budgetCtrl, UICtrl) {
         totalExp: 0,
         budget: 0,
         percentage: 0
-      })      
+      });
+      
+      UICtrl.displayMonth();
     }
   }
 
