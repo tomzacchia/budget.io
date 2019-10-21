@@ -147,6 +147,23 @@ var UIController = (function() {
     expensesPercentage: '.item__percentage'
   }
 
+  var formatNumber = function(num) {
+
+    var numSplit, int, dec;
+
+    num = num.toFixed(2);
+    numSplit = num.split('.');
+
+    int = numSplit[0];
+    dec = numSplit[1];
+
+    if (int.length > 3) {
+      int = `${int.substr(0, int.length - 3)},${int.substr(1,3)}`;
+    }
+
+    return `${int}.${dec}`;
+  }
+
   return {
     getInput: function() {
       return {
@@ -195,7 +212,7 @@ var UIController = (function() {
       // Replace placeholder text with newItem data
       newHTML = html.replace('%id%', obj.id);
       newHTML = newHTML.replace('%description%', obj.description);
-      newHTML = newHTML.replace('%value%', obj.value);
+      newHTML = newHTML.replace('%value%', formatNumber(obj.value));
 
       // Insert HTML into DOM
       htmlContainer = type === 'inc' ? 
@@ -227,9 +244,9 @@ var UIController = (function() {
     },
 
     displayBudget: function(obj) {
-      document.querySelector(DOMStrings.netBudget).textContent = obj.budget;
-      document.querySelector(DOMStrings.totalIncome).textContent = obj.totalInc;
-      document.querySelector(DOMStrings.totalExpense).textContent = obj.totalExp;
+      document.querySelector(DOMStrings.netBudget).textContent = formatNumber(obj.budget);
+      document.querySelector(DOMStrings.totalIncome).textContent = formatNumber(obj.totalInc);
+      document.querySelector(DOMStrings.totalExpense).textContent = formatNumber(obj.totalExp);
       document.querySelector(DOMStrings.percentage).textContent = `${obj.percentage}%`;
     },
 
@@ -240,6 +257,8 @@ var UIController = (function() {
         field.textContent = percentagesArray[index].percentage + '%';
       })
     },
+
+
 
     getDOMString: function() {
       return DOMStrings; // exposing DOMStrings to the public
