@@ -1,4 +1,4 @@
-# [Budget App](https://raw.githack.com/tomzacchia/budget.io/master/index.html)
+# [Budget App](https://rawcdn.githack.com/tomzacchia/budget.io/f8eee35a0833ec027b1c18093ce3debebddaf32c/index.html)
 Budget.io is an applicaton made using HTML, CSS and JS and explores the concept of 
 DOM manipulation using Vanilla JS. This project was created as part of the video series 
 [The Complete Javascript Course 2019 by Jonas Schmedtmann](https://www.udemy.com/course/the-complete-javascript-course/).
