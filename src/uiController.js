@@ -8,11 +8,11 @@ const formatNumber = function(num) {
   int = numSplit[0];
   dec = numSplit[1];
 
-  const digitsAfterHundreds = int.length - 3;
+  const endOfThousands = int.length - 3;
   const startOfHUndreds = int.length > 4 ? 2 : 1;
 
   if (int.length > 3) {
-    int = `${int.substr(0, digitsAfterHundreds)},${int.substr(startOfHUndreds,3)}`;
+    int = `${int.substr(0, endOfThousands)},${int.substr(startOfHUndreds,3)}`;
   }
 
   return `${int}.${dec}`;
