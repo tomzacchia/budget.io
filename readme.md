@@ -60,6 +60,6 @@ I remember reading the following line
 ```javascript 
 int = `${int.substr(0, int.length - 3)},${int.substr(1,3)}`; 
 ```
-and thinking to myself: "What the hell is at int.length-3 and what do 1&3 represent. Needless to say im embarrassed to admit that it took me a few minutes to understand what the me of the past meant when he wrote this line. Obviously in the moment it is easy to know why these integer values were selected however code can be self documenting if meaningful variables are declared.
+and thinking to myself: "What the hell does int.length-3 represent and why were the integer values 1 and 3 chosen". Needless to say im embarrassed to admit that it took me a few minutes to understand what the me of the past meant when he wrote this line. Obviously in the moment it is easy to know why these integer values were selected however code can be self documenting if meaningful variables are declared.
 
 One of the little annecdotes from Code Clean that really stuck with me was the fact that when you write code the goal should not be to make a program work but rather write code that is meant to be read by others. Or put another way, to minimize the number of WTFs/minute for you and your peers.
