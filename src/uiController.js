@@ -1,22 +1,4 @@
-const formatNumber = function(num) {
 
-  var numSplit, int, dec;
-
-  num = num.toFixed(2);
-  numSplit = num.split('.');
-
-  int = numSplit[0];
-  dec = numSplit[1];
-
-  const endOfThousands = int.length - 3;
-  const startOfHUndreds = int.length > 4 ? 2 : 1;
-
-  if (int.length > 3) {
-    int = `${int.substr(0, endOfThousands)},${int.substr(startOfHUndreds,3)}`;
-  }
-
-  return `${int}.${dec}`;
-}
 
 const UIController = (function() {
 
@@ -65,6 +47,42 @@ const UIController = (function() {
     </div>
   `;
 
+  const formatNumber = function(num) {
+
+    var numSplit, int, dec;
+
+    num = num.toFixed(2);
+    numSplit = num.split('.');
+
+    int = numSplit[0];
+    dec = numSplit[1];
+
+    const endOfThousands = int.length - 3;
+    const startOfHUndreds = int.length > 4 ? 2 : 1;
+
+    if (int.length > 3) {
+      int = `${int.substr(0, endOfThousands)},${int.substr(startOfHUndreds,3)}`;
+    }
+
+    return `${int}.${dec}`;
+  }
+
+  const formatHTMLMarkup = function(isIncome, newBudgetItem) {
+    let html, newHTML;
+
+    if (isIncome) {
+      html = incomeHTMLMarkup;
+    } else {
+      html = expenseHTMLMarkup;     
+    }
+
+    newHTML = html.replace('%id%', newBudgetItem.id);
+    newHTML = newHTML.replace('%description%', newBudgetItem.description);
+    newHTML = newHTML.replace('%value%', formatNumber(newBudgetItem.value));
+    
+    return newHTML;
+  }
+
   return {
     getInput: function() {
       return {
@@ -74,27 +92,16 @@ const UIController = (function() {
       };
     },
     
-    addListItem: function(newBudgetItem, newBudgetItemType) {
-      var html, newHTML, htmlContainer;
+    renderListItem: function(newBudgetItem, newBudgetItemType) {
       const isIncome = newBudgetItemType === 'inc';
-      const isExpense = newBudgetItemType === 'exp';
 
-      // create HTML string with placeholder text 
-      if (isIncome) {
-        html = incomeHTMLMarkup;
-      } else if (isExpense) {
-        html = expenseHTMLMarkup;     
-      }
+      const HTML = formatHTMLMarkup(isIncome, newBudgetItem);
 
-      newHTML = html.replace('%id%', newBudgetItem.id);
-      newHTML = newHTML.replace('%description%', newBudgetItem.description);
-      newHTML = newHTML.replace('%value%', formatNumber(newBudgetItem.value));
-
-      htmlContainer = isIncome ? 
+      const htmlContainer = isIncome ? 
         DOMStrings.incomeContainer : 
         DOMStrings.expenseContainer;
 
-      document.querySelector(htmlContainer).insertAdjacentHTML('beforeend', newHTML);
+      document.querySelector(htmlContainer).insertAdjacentHTML('beforeend', HTML);
     },
 
     deleteListItem: function(itemID) {

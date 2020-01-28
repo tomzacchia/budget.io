@@ -23,19 +23,15 @@ const controller = (function(budgetCtrl, UICtrl) {
 
   var ctrlAddItem = function() {
     var input, newItem;
-  
-    // 1. Get input data
+
     input = UICtrl.getInput();
 
     if (input.description && input.value > 0)  {
-      // 2. Add item to the budget controller
       newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
-      // 3. Add the new item to the UI
-      UIController.addListItem(newItem, input.type);
+      UIController.renderListItem(newItem, input.type);
       UIController.clearFields();
 
-      // 4. Calculate and update budget
       updateBudget();
       updatePercentages();
     }
@@ -43,23 +39,20 @@ const controller = (function(budgetCtrl, UICtrl) {
   }
 
   var ctrlDeleteItem = function(event) {
-    var itemDataset, splitID, type, budgetItemID;
+    var splitID, type, budgetItemID, itemID;
 
     itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
-
+ 
     if (itemID) {
-      // inc-_2qnlw1uq0
+      const positionOfType = 0;
       splitID = itemID.split('-');
-      type = splitID[0];
-      budgetItemID = splitID[1];
+      type = splitID[positionOfType];
+      budgetItemID = splitID[positionOfID];
 
-      // 1. Delete item from data structure
       budgetCtrl.deleteItem(type, budgetItemID);
 
-      // 2. Delete the item from the UI
       UICtrl.deleteListItem(itemID);
 
-      // 3. Update and show budget
       updateBudget();
       updatePercentages();
     }
@@ -67,24 +60,18 @@ const controller = (function(budgetCtrl, UICtrl) {
   }
 
   var updatePercentages = function() {
-    // 1. Calculate percentages
     budgetCtrl.calculatePercentages();
 
-    // 2. Read from budget controller
     var percentages = budgetCtrl.getPercentages();
 
-    // 3. Update UI with new percentages
     UICtrl.displayPercentages(percentages);
   };
 
   var updateBudget = function() {
-    // 1. Calculate the budget
     budgetController.calculateBudget();
 
-    // 2. Return the budget
     var budget = budgetCtrl.getBudget();
 
-    // 3. Update budget in UI
     UICtrl.displayBudget(budget);
   }
 
