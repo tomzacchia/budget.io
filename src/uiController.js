@@ -103,17 +103,16 @@ const UIController = (function() {
     },
 
     clearFields: function() {
-      var fields, fieldsArrray;
+      var fieldsList, fieldsArrray;
       
-      // returns a list, convert to array
-      fields = document.querySelectorAll(
+      fieldsList = document.querySelectorAll(
         DOMStrings.inputDescription + ', ' + DOMStrings.inputValue
       );
 
-      fieldsArrray = [ ...fields ];
+      fieldsArrray = [ ...fieldsList ];
 
-      fieldsArrray.forEach( el => {
-        el.value = '';
+      fieldsArrray.forEach( inputField => {
+        inputField.value = '';
       })
 
       fieldsArrray[0].focus();
