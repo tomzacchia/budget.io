@@ -34,7 +34,36 @@ const UIController = (function() {
     container: '.container',
     expensesPercentage: '.item__percentage',
     monthText: '.budget__title--month'
-  }
+  };
+
+  const incomeHTMLMarkup = `
+    <div class="item clearfix" id="inc-%id%">
+      <div class="item__description"> %description% </div>
+      <div class="right clearfix">
+        <div class="item__value"> + %value% </div>
+        <div class="item__delete">
+            <button class="item__delete--btn">
+              <i class="far fa-times-circle"></i>
+            </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const expenseHTMLMarkup = `
+    <div class="item clearfix" id="exp-%id%">
+      <div class="item__description"> %description% </div>
+      <div class="right clearfix">
+          <div class="item__value"> - %value% </div>
+          <div class="item__percentage">21%</div>
+          <div class="item__delete">
+              <button class="item__delete--btn">
+                <i class="far fa-times-circle"></i>
+              </button>
+          </div>
+      </div>
+    </div>
+  `;
 
   return {
     getInput: function() {
@@ -52,34 +81,9 @@ const UIController = (function() {
 
       // create HTML string with placeholder text 
       if (isIncome) {
-        html = `
-          <div class="item clearfix" id="inc-%id%">
-            <div class="item__description"> %description% </div>
-            <div class="right clearfix">
-              <div class="item__value"> + %value% </div>
-              <div class="item__delete">
-                  <button class="item__delete--btn">
-                    <i class="far fa-times-circle"></i>
-                  </button>
-              </div>
-            </div>
-          </div>
-        `;
+        html = incomeHTMLMarkup;
       } else if (isExpense) {
-        html = `
-          <div class="item clearfix" id="exp-%id%">
-            <div class="item__description"> %description% </div>
-            <div class="right clearfix">
-                <div class="item__value"> - %value% </div>
-                <div class="item__percentage">21%</div>
-                <div class="item__delete">
-                    <button class="item__delete--btn">
-                      <i class="far fa-times-circle"></i>
-                    </button>
-                </div>
-            </div>
-          </div>
-        `;     
+        html = expenseHTMLMarkup;     
       }
 
       newHTML = html.replace('%id%', newBudgetItem.id);
